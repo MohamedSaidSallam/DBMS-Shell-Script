@@ -8,6 +8,34 @@ function timedError() {
     clear
 }
 
+function dbMenu() {
+    clear
+    echo "Now you are working with '$1' DB"
+    echo
+    select option in "Create new Table" "Delete Table" "Insert into Table" "Modify a Table" "Display a Table" "List Existing Tables" "Back to main menu"
+    do
+        case $option in
+            "Create new Table")
+                ;;
+            "Delete Table")
+                ;;
+            "Insert into Table")
+                ;;
+            "Modify a Table")
+                ;;
+            "Display a Table")
+                ;;
+            "List Existing Tables")
+                ;;
+            "Back to main menu")
+                return
+                ;;
+        esac
+        break
+    done
+    dbMenu $1
+}
+
 function mainMenu()  {
     clear
     echo "Main Menu :"
@@ -22,6 +50,9 @@ function mainMenu()  {
             "Delete DB")
                 ;;
             "Open DB")
+                #list dbs
+                #select db
+                dbMenu "temp DB"
                 ;;
             "List existing DBs")
                 ;;
