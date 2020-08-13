@@ -10,8 +10,7 @@ function timedError() {
 
 function dbMenu() {
     clear
-    echo "Now you are working with '$1' DB"
-    echo
+    echo -e "Now you are working with '$1' DB\n"
     select option in "Create new Table" "Delete Table" "Insert into Table" "Modify a Table" "Display a Table" "List Existing Tables" "Back to main menu"
     do
         case $option in
@@ -38,8 +37,7 @@ function dbMenu() {
 
 function mainMenu()  {
     clear
-    echo "Main Menu :"
-    echo
+    echo -e "Main Menu :\n"
     select option in "Create new DB" "Delete DB" "Open DB" "List existing DBs" "Exit"
     do
         case $option in
