@@ -8,6 +8,13 @@ function timedError() {
     clear
 }
 
+function timedsSccess() {
+    clear
+    echo -e "\n\t$1\n"
+    sleep 1
+    clear
+}
+
 function dbMenu() {
     clear
     echo -e "Now you are working with '$1' DB\n"
@@ -43,7 +50,7 @@ function mainMenu()  {
         case $option in
             "Create new DB")
                 echo started
-                timedError "Test"
+                timedsSccess "Test"
                 ;;
             "Delete DB")
                 ;;
