@@ -145,6 +145,28 @@ function deleteTable() {
     fi
 }
 
+function insertValueIntoFile() {
+    echo "Enter a value: ($currentDataType)"
+    case $currentDataType in
+    "String")
+        datatypeLimit="^[a-zA-Z ]+$"
+        acceptedInput="a string consisting of one or more lowercase, uppercase letter or a space"
+        ;;
+    "Integer")
+        datatypeLimit="^[0-9]+$"
+        acceptedInput="a number consisting of one or more digits"
+        ;;
+    esac
+    read value
+    while [[ ! $value =~ $datatypeLimit ]]
+    do
+        echo "Input Does not match Datatype"
+        echo "Accepted input: $acceptedInput"
+        read value
+    done
+    echo -n "$value," >> $fileName
+}
+
 function insertIntoTable() {
     checkIfTablesExist $1
     if [ $? -eq 0 ]
@@ -176,39 +198,28 @@ function insertIntoTable() {
 
             echo -e "Now you're going to insert into '$tableName' Table\n"
             echo "Enter the value of column '$currentColumnName'"
-            select choice in "Enter a value" "Leave this empty"
-            do
-                case $choice in
-                "Enter a value")
-                    echo "Enter a value: ($currentDataType)"
-                    case $currentDataType in
-                    "String")
-                        datatypeLimit="^[a-zA-Z0-9 ]+$"
-                        acceptedInput="a string consisting of one or more space, lowercase or uppercase letter"
+            if [ $i -eq 1 ]
+            then
+                echo "(PK must have a value)"
+                insertValueIntoFile $currentDataType $fileName
+            else
+                select choice in "Enter a value" "Leave this empty"
+                do
+                    case $choice in
+                    "Enter a value")
+                        insertValueIntoFile $currentDataType $fileName
+                        break
                         ;;
-                    "Integer")
-                        datatypeLimit="^[0-9]+$"
-                        acceptedInput="a number consisting of one or more digits"
+                    "Leave this empty")
+
+                        echo -n "," >> $fileName
+                        break
                         ;;
+                    *)
+                        echo "Invalid Input"
                     esac
-                    read value
-                    while [[ ! $value =~ $datatypeLimit ]]
-                    do
-                        echo "Input Does not match Datatype"
-                        echo "Accepted input: $acceptedInput"
-                        read value
-                    done
-                    echo -n "$value," >> $fileName
-                    break
-                    ;;
-                "Leave this empty")
-                    echo -n "," >> $fileName
-                    break
-                    ;;
-                *)
-                    echo "Invalid Input"
-                esac
-            done
+                done
+            fi
 
             i=$(($i+1))
         done
