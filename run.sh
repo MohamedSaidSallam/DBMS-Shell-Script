@@ -110,9 +110,21 @@ function mainMenu()  {
                 fi
                 ;;
             "Open DB")
-                #list dbs
-                #select db
-                dbMenu "temp DB"
+                checkIfDBsExist
+                if [ $? -eq 0 ]
+                then
+                    listDBs
+                    echo "Kindly enter DB name to be DELETED"
+                    read dbName
+                    while [ ! -d $DIR_DB_STORAGE$dbName ]
+                    do
+                        echo "'$dbName' DB doesn't exist!"
+                        echo "Try Again"
+                        read dbName
+                    done
+                    clear
+                    dbMenu $dbName
+                fi
                 ;;
             "List existing DBs")
                 listDBs
