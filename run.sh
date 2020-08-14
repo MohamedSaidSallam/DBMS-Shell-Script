@@ -158,11 +158,22 @@ function insertValueIntoFile() {
         ;;
     esac
     read value
-    while [[ ! $value =~ $datatypeLimit ]]
+    while true
     do
-        echo "Input Does not match Datatype"
-        echo "Accepted input: $acceptedInput"
-        read value
+        while [[ ! $value =~ $datatypeLimit ]]
+        do
+            echo "Input Does not match Datatype"
+            echo "Accepted input: $acceptedInput"
+            read value
+        done
+        if [ $i -eq 1 -a -n "$(cut -f 1 -d , $fileName | grep -w $value)" ]
+        then
+            echo "PK must be unique"
+            echo "Re-enter a unique value"
+            read value
+        else
+            break
+        fi
     done
     echo -n "$value," >> $fileName
 }
