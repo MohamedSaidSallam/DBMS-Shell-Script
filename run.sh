@@ -32,6 +32,61 @@ function checkIfDBsExist() {
     return 0
 }
 
+function createTable() {
+    fileName="$DIR_DB_STORAGE$1/$tableName.csv"
+    echo "Kindly enter your Table name:"
+    read tableName
+    if test -f $fileName
+    then
+        timedError "A table named \"$tableName\" already exists."
+    elif [[ $tableName =~ ^[a-zA-Z][a-zA-Z0-9]* ]]
+    then
+        timedSuccess "P.S. The first column will be your PK"
+        echo -e "Now you are working with '$tableName' table\n"
+        echo "Please enter number of columns: "
+        read numberOfColumns
+        while [[ ! $numberOfColumns =~ [0-9]+ ]]
+        do
+            echo "Invalid Number"
+            read numberOfColumns
+        done
+        i=0
+        while [ $numberOfColumns -gt $i ]
+        do
+            clear
+            echo -e "Now you're settubg the names and datatypes of columns in '$tableName' table.\n"
+            echo "Please enter the name of column $(($i+1)):"
+            read columnName
+            while [[ ! $columnName =~ [a-zA-Z]+ ]]
+            do
+                echo "Invalid String"
+                read columnName
+            done
+            echo "What data type are you going to store in '$columnName' column?"
+            select choice in "Integer" "String"
+            do
+                case $choice in
+                    "Integer")
+                        echo -n "$columnName/Integer," >> $fileName
+                        break
+                        ;;
+                    "String")
+                        echo -n "$columnName/String," >> $fileName
+                        break
+                        ;;
+                    *)
+                        echo "Invalid Option"
+                esac
+            done
+            i=$(($i+1))
+        done
+        echo "" >> $fileName
+        timedSuccess "Table \"$tableName\" was created successfully."
+    else
+        timedError "Invalid name.(Table name should start with a letter and contain only letters and numbers!!)"
+    fi
+}
+
 function dbMenu() {
     clear
     echo -e "Now you are working with '$1' DB\n"
@@ -39,6 +94,7 @@ function dbMenu() {
     do
         case $option in
             "Create new Table")
+                createTable $1
                 ;;
             "Delete Table")
                 ;;
