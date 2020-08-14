@@ -240,6 +240,30 @@ function insertIntoTable() {
     fi
 }
 
+function displayTable() {
+    checkIfTablesExist $1
+    if [ $? -eq 0 ]
+    then
+        listTables $DIR_DB_STORAGE$1
+        echo "Kindly enter Table name to insert into"
+        read tableName
+        fileName="$DIR_DB_STORAGE$1/$tableName.csv"
+        while [ ! -f $fileName ]
+        do
+            echo "'$tableName' table doesn't exist!"
+            echo "Try Again"
+            read tableName
+            fileName="$DIR_DB_STORAGE$1/$tableName.csv"
+        done
+
+        clear
+        sed "s/,/\t\t/g" $fileName
+
+        echo "|Press enter to continue|"
+        read
+    fi
+}
+
 function dbMenu() {
     clear
     echo -e "Now you are working with '$1' DB\n"
@@ -259,6 +283,7 @@ function dbMenu() {
                 timedError "Not Implemented"
                 ;;
             "Display a Table")
+                displayTable $1
                 ;;
             "List Existing Tables")
                 listTables $DIR_DB_STORAGE$1
