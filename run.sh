@@ -24,7 +24,7 @@ function listDBs() {
 }
 
 function checkIfDBsExist() {
-    if test -z $(ls $DIR_DB_STORAGE)
+    if test -z "$(ls $DIR_DB_STORAGE)"
     then
         timedError "You don't have any DBs yet!"
         return -1
@@ -110,6 +110,15 @@ function listTables() {
     ls $1
 }
 
+function checkIfTablesExist() {
+    if test -z "$(ls $DIR_DB_STORAGE$1)"
+    then
+        timedError "You don't have any Tables yet!"
+        return -1
+    fi
+    return 0
+}
+
 function dbMenu() {
     clear
     echo -e "Now you are working with '$1' DB\n"
@@ -120,6 +129,12 @@ function dbMenu() {
                 createTable $1
                 ;;
             "Delete Table")
+                checkIfTablesExist $1
+                if [ $? -eq 0 ]
+                then
+                    echo delete
+                fi
+                read
                 ;;
             "Insert into Table")
                 ;;
