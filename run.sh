@@ -23,6 +23,15 @@ function listDBs() {
     ls $DIR_DB_STORAGE
 }
 
+function checkIfDBsExist() {
+    if test -z $(ls $DIR_DB_STORAGE)
+    then
+        timedError "You don't have any DBs yet!"
+        return -1
+    fi
+    return 0
+}
+
 function dbMenu() {
     clear
     echo -e "Now you are working with '$1' DB\n"
@@ -72,10 +81,9 @@ function mainMenu()  {
                 fi
                 ;;
             "Delete DB")
-                if test -z $(ls $DIR_DB_STORAGE)
+                checkIfDBsExist
+                if [ $? -eq 0 ]
                 then
-                    timedError "You don't have any DBs yet!"
-                else
                     listDBs
                     echo "Kindly enter DB name to be DELETED"
                     read dbName
