@@ -17,9 +17,9 @@ function timedSuccess() {
 }
 
 function listDBs() {
-    echo "+====================+"
-    echo "|Existing Tables are:|"
-    echo "+====================+"
+    echo "+=================+"
+    echo "|Existing DBs are:|"
+    echo "+=================+"
     ls $DIR_DB_STORAGE
 }
 
@@ -87,6 +87,13 @@ function createTable() {
     fi
 }
 
+function listTables() {
+    echo "+====================+"
+    echo "|Existing Tables are:|"
+    echo "+====================+"
+    ls $1
+}
+
 function dbMenu() {
     clear
     echo -e "Now you are working with '$1' DB\n"
@@ -105,6 +112,11 @@ function dbMenu() {
             "Display a Table")
                 ;;
             "List Existing Tables")
+                listTables $DIR_DB_STORAGE$1
+                echo "+=======================+"
+                echo "|Press enter to continue|"
+                echo "+=======================+"
+                read
                 ;;
             "Back to main menu")
                 return
