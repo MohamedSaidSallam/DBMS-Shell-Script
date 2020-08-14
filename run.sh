@@ -1,5 +1,6 @@
 #!/bin/bash
 
+DIR_DB_STORAGE="./DBStorage/"
 TIMED_MSG_TIME=2
 
 function timedError() {
@@ -49,8 +50,18 @@ function mainMenu()  {
     do
         case $option in
             "Create new DB")
-                echo started
-                timedsSccess "Test"
+                echo "Kindly Enter your new DB name:"
+                read dbName
+                if test -d $DIR_DB_STORAGE$dbName
+                then
+                    timedError "A DB named \"$dbName\" already exists."
+                elif [[ $dbName =~ ^[a-zA-Z][a-zA-Z0-9]* ]]
+                then
+                    mkdir -p $DIR_DB_STORAGE$dbName
+                    timedsSccess "DB: \"$dbName\" was created successfully."
+                else
+                    timedError "Invalid name.(DB name should start with a letter and contain only letters and numbers!!)"
+                fi
                 ;;
             "Delete DB")
                 ;;
