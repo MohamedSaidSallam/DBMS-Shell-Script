@@ -201,13 +201,13 @@ function insertIntoTable() {
             if [ $i -eq 1 ]
             then
                 echo "(PK must have a value)"
-                insertValueIntoFile $currentDataType $fileName
+                insertValueIntoFile
             else
                 select choice in "Enter a value" "Leave this empty"
                 do
                     case $choice in
                     "Enter a value")
-                        insertValueIntoFile $currentDataType $fileName
+                        insertValueIntoFile
                         break
                         ;;
                     "Leave this empty")
