@@ -9,7 +9,7 @@ function timedError() {
     clear
 }
 
-function timedsSccess() {
+function timedSuccess() {
     clear
     echo -e "\n\t$1\n"
     sleep $TIMED_MSG_TIME
@@ -66,7 +66,7 @@ function mainMenu()  {
                 elif [[ $dbName =~ ^[a-zA-Z][a-zA-Z0-9]* ]]
                 then
                     mkdir $DIR_DB_STORAGE$dbName
-                    timedsSccess "DB: \"$dbName\" was created successfully."
+                    timedSuccess "DB: \"$dbName\" was created successfully."
                 else
                     timedError "Invalid name.(DB name should start with a letter and contain only letters and numbers!!)"
                 fi
@@ -92,7 +92,7 @@ function mainMenu()  {
                         case $choice in
                             "Confirm")
                                 rm -r $DIR_DB_STORAGE$dbName
-                                timedsSccess "\"dbName\" DB was deleted"
+                                timedSuccess "\"dbName\" DB was deleted"
                                 ;;
                             "Cancel")
                                 ;;
