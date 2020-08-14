@@ -32,6 +32,22 @@ function checkIfDBsExist() {
     return 0
 }
 
+function confirmMenu() {
+    select choice in "Confirm" "Cancel"
+    do
+        case $choice in
+            "Confirm")
+                return 0
+                ;;
+            "Cancel")
+                return -1
+                ;;
+            *)
+                echo "Invalid Option"
+        esac
+    done
+}
+
 function createTable() {
     fileName="$DIR_DB_STORAGE$1/$tableName.csv"
     echo "Kindly enter your Table name:"
@@ -163,21 +179,13 @@ function mainMenu()  {
                     done
                     clear
                     echo "Do you want to Delete '$dbName' DB?"
-                    select choice in "Confirm" "Cancel"
-                    do
-                        case $choice in
-                            "Confirm")
-                                rm -r $DIR_DB_STORAGE$dbName
-                                timedSuccess "\"dbName\" DB was deleted"
-                                break
-                                ;;
-                            "Cancel")
-                                break
-                                ;;
-                            *)
-                                echo "Invalid Option"
-                        esac
-                    done
+                    confirmMenu
+                    if [ $? -eq 0 ]
+                    then
+                        rm -r $DIR_DB_STORAGE$dbName
+                        timedSuccess "\"dbName\" DB was deleted"
+                    fi
+
                 fi
                 ;;
             "Open DB")
