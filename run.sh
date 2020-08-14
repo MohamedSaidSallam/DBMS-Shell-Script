@@ -49,9 +49,9 @@ function confirmMenu() {
 }
 
 function createTable() {
-    fileName="$DIR_DB_STORAGE$1/$tableName.csv"
     echo "Kindly enter your Table name:"
     read tableName
+    fileName="$DIR_DB_STORAGE$1/$tableName.csv"
     if test -f $fileName
     then
         timedError "A table named \"$tableName\" already exists."
@@ -107,7 +107,7 @@ function listTables() {
     echo "+====================+"
     echo "|Existing Tables are:|"
     echo "+====================+"
-    ls $1
+    ls $1 | cut -f 1 -d .
 }
 
 function checkIfTablesExist() {
@@ -117,6 +117,31 @@ function checkIfTablesExist() {
         return -1
     fi
     return 0
+}
+
+function deleteTable() {
+    checkIfTablesExist $1
+    if [ $? -eq 0 ]
+    then
+        listTables $DIR_DB_STORAGE$1
+        echo "Kindly enter Table name to be DELETED"
+        read tableName
+        fileName="$DIR_DB_STORAGE$1/$tableName.csv"
+        while [ ! -f $fileName ]
+        do
+            echo "'$tableName' table doesn't exist!"
+            echo "Try Again"
+            read tableName
+        done
+        clear
+        echo "Do you want to Delete '$tableName' Table?"
+        confirmMenu
+        if [ $? -eq 0 ]
+        then
+            rm $fileName
+            timedSuccess "\"$tableName\" table was deleted"
+        fi
+    fi
 }
 
 function dbMenu() {
@@ -129,12 +154,7 @@ function dbMenu() {
                 createTable $1
                 ;;
             "Delete Table")
-                checkIfTablesExist $1
-                if [ $? -eq 0 ]
-                then
-                    echo delete
-                fi
-                read
+                deleteTable $1
                 ;;
             "Insert into Table")
                 ;;
@@ -198,7 +218,7 @@ function mainMenu()  {
                     if [ $? -eq 0 ]
                     then
                         rm -r $DIR_DB_STORAGE$dbName
-                        timedSuccess "\"dbName\" DB was deleted"
+                        timedSuccess "\"$dbName\" DB was deleted"
                     fi
 
                 fi
