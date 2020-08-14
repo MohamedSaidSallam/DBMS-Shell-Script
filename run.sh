@@ -51,6 +51,7 @@ function dbMenu() {
 }
 
 function mainMenu()  {
+    mkdir $DIR_DB_STORAGE
     clear
     echo -e "Main Menu :\n"
     select option in "Create new DB" "Delete DB" "Open DB" "List existing DBs" "Exit"
@@ -64,13 +65,41 @@ function mainMenu()  {
                     timedError "A DB named \"$dbName\" already exists."
                 elif [[ $dbName =~ ^[a-zA-Z][a-zA-Z0-9]* ]]
                 then
-                    mkdir -p $DIR_DB_STORAGE$dbName
+                    mkdir $DIR_DB_STORAGE$dbName
                     timedsSccess "DB: \"$dbName\" was created successfully."
                 else
                     timedError "Invalid name.(DB name should start with a letter and contain only letters and numbers!!)"
                 fi
                 ;;
             "Delete DB")
+                if test -z $(ls $DIR_DB_STORAGE)
+                then
+                    timedError "You don't have any DBs yet!"
+                else
+                    listDBs
+                    echo "Kindly enter DB name to be DELETED"
+                    read dbName
+                    while [ ! -d $DIR_DB_STORAGE$dbName ]
+                    do
+                        echo "'$dbName' DB doesn't exist!"
+                        echo "Try Again"
+                        read dbName
+                    done
+                    clear
+                    echo "Do you want to Delete '$dbName' DB?"
+                    select choice in "Confirm" "Cancel"
+                    do
+                        case $choice in
+                            "Confirm")
+                                rm -r $DIR_DB_STORAGE$dbName
+                                timedsSccess "\"dbName\" DB was deleted"
+                                ;;
+                            "Cancel")
+                                ;;
+                        esac
+                        break
+                    done
+                fi
                 ;;
             "Open DB")
                 #list dbs
