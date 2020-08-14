@@ -116,8 +116,8 @@ function dbMenu() {
 }
 
 function mainMenu()  {
-    mkdir $DIR_DB_STORAGE
     clear
+    mkdir $DIR_DB_STORAGE 2> /dev/null
     echo -e "Main Menu :\n"
     select option in "Create new DB" "Delete DB" "Open DB" "List existing DBs" "Exit"
     do
