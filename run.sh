@@ -157,11 +157,14 @@ function mainMenu()  {
                             "Confirm")
                                 rm -r $DIR_DB_STORAGE$dbName
                                 timedSuccess "\"dbName\" DB was deleted"
+                                break
                                 ;;
                             "Cancel")
+                                break
                                 ;;
+                            *)
+                                echo "Invalid Option"
                         esac
-                        break
                     done
                 fi
                 ;;
