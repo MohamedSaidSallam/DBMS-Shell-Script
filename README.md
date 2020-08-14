@@ -1,6 +1,6 @@
 # DBMS Shell Script
 
-A shell script that acts as a simple database mangement system.
+A shell script that acts as a simple database management  system.
 
 This was a mini project for [DevOps Booster by sprints][DevOpsBooster]
 
