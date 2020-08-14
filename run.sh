@@ -16,6 +16,13 @@ function timedsSccess() {
     clear
 }
 
+function listDBs() {
+    echo "+====================+"
+    echo "|Existing Tables are:|"
+    echo "+====================+"
+    ls $DIR_DB_STORAGE
+}
+
 function dbMenu() {
     clear
     echo -e "Now you are working with '$1' DB\n"
@@ -71,6 +78,11 @@ function mainMenu()  {
                 dbMenu "temp DB"
                 ;;
             "List existing DBs")
+                listDBs
+                echo "+=======================+"
+                echo "|Press enter to continue|"
+                echo "+=======================+"
+                read
                 ;;
             "Exit")
                 exit
