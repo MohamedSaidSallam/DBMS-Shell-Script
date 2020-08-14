@@ -1,17 +1,17 @@
 #!/bin/bash
 
-ERR_ = ""
+TIMED_MSG_TIME=2
 
 function timedError() {
     echo $1
-    sleep 2
+    sleep $TIMED_MSG_TIME
     clear
 }
 
 function timedsSccess() {
     clear
     echo -e "\n\t$1\n"
-    sleep 2
+    sleep $TIMED_MSG_TIME
     clear
 }
 
