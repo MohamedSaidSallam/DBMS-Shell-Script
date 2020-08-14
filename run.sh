@@ -4,14 +4,14 @@ ERR_ = ""
 
 function timedError() {
     echo $1
-    sleep 1
+    sleep 2
     clear
 }
 
 function timedsSccess() {
     clear
     echo -e "\n\t$1\n"
-    sleep 1
+    sleep 2
     clear
 }
 
