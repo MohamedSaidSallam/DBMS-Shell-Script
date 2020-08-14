@@ -132,6 +132,7 @@ function deleteTable() {
             echo "'$tableName' table doesn't exist!"
             echo "Try Again"
             read tableName
+            fileName="$DIR_DB_STORAGE$1/$tableName.csv"
         done
         clear
         echo "Do you want to Delete '$tableName' Table?"
@@ -141,6 +142,79 @@ function deleteTable() {
             rm $fileName
             timedSuccess "\"$tableName\" table was deleted"
         fi
+    fi
+}
+
+function insertIntoTable() {
+    checkIfTablesExist $1
+    if [ $? -eq 0 ]
+    then
+        listTables $DIR_DB_STORAGE$1
+        echo "Kindly enter Table name to insert into"
+        read tableName
+        fileName="$DIR_DB_STORAGE$1/$tableName.csv"
+        while [ ! -f $fileName ]
+        do
+            echo "'$tableName' table doesn't exist!"
+            echo "Try Again"
+            read tableName
+            fileName="$DIR_DB_STORAGE$1/$tableName.csv"
+        done
+        firstLine=$(head -n 1 $fileName)
+        i=1
+        while true
+        do
+            clear
+            currentColumn=$(echo $firstLine | cut -f $i -d ,)
+            currentColumnName=$(echo $currentColumn | cut -f 1 -d / )
+            currentDataType=$(echo $currentColumn | cut -f 2 -d / )
+
+            if [ -z $currentColumn ]
+            then
+                break
+            fi
+
+            echo -e "Now you're going to insert into '$tableName' Table\n"
+            echo "Enter the value of column '$currentColumnName'"
+            select choice in "Enter a value" "Leave this empty"
+            do
+                case $choice in
+                "Enter a value")
+                    echo "Enter a value: ($currentDataType)"
+                    case $currentDataType in
+                    "String")
+                        datatypeLimit="^[a-zA-Z0-9 ]+$"
+                        acceptedInput="a string consisting of one or more space, lowercase or uppercase letter"
+                        ;;
+                    "Integer")
+                        datatypeLimit="^[0-9]+$"
+                        acceptedInput="a number consisting of one or more digits"
+                        ;;
+                    esac
+                    read value
+                    while [[ ! $value =~ $datatypeLimit ]]
+                    do
+                        echo "Input Does not match Datatype"
+                        echo "Accepted input: $acceptedInput"
+                        read value
+                    done
+                    echo -n "$value," >> $fileName
+                    break
+                    ;;
+                "Leave this empty")
+                    echo -n "," >> $fileName
+                    break
+                    ;;
+                *)
+                    echo "Invalid Input"
+                esac
+            done
+
+            i=$(($i+1))
+        done
+
+        echo "" >> $fileName
+        timedSuccess "Your record was saved successfully"
     fi
 }
 
@@ -157,8 +231,10 @@ function dbMenu() {
                 deleteTable $1
                 ;;
             "Insert into Table")
+                insertIntoTable $1
                 ;;
             "Modify a Table")
+                timedError "Not Implemented"
                 ;;
             "Display a Table")
                 ;;
@@ -228,7 +304,7 @@ function mainMenu()  {
                 if [ $? -eq 0 ]
                 then
                     listDBs
-                    echo "Kindly enter DB name to be DELETED"
+                    echo "Kindly enter DB name to open"
                     read dbName
                     while [ ! -d $DIR_DB_STORAGE$dbName ]
                     do
